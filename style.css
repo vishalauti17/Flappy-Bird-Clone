@@ -1,53 +1,5 @@
 body {
   margin: 0;
-  padding: 0;
-  background: linear-gradient(#a0e9f7, #ffffff);
-  font-family: Arial, sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
-.game-container {
-  text-align: center;
-}
-
-canvas {
-  background: #70c5ce;
-  border: 3px solid #222;
-  border-radius: 10px;
-  width: 90vw;
-  max-width: 480px;
-  height: 70vh;
-}
-
-.info {
-  margin-top: 10px;
-  font-size: 1.2em;
-  color: #333;
-}
-@media (max-width: 600px) {
-  .navbar {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .nav-links {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .smash-button {
-    width: 100%;
-  }
-
-  .canvas-container {
-    padding: 10px;
-  }
-}
-body {
-  margin: 0;
   font-family: Arial, sans-serif;
   background-color: #ccefff;
 }
@@ -57,10 +9,14 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 24px;
-  position: sticky;
   top: 0;
   z-index: 999;
+  display: flex;
+  padding: 1rem 2rem;
+  position: relative;
+  z-index: 2;
+
+        
 }
 
 .logo {
@@ -117,6 +73,7 @@ body {
 
 .dropdown-content li:hover {
   background-color: #f0f0f0;
+  position: fixed;
 }
 
 .dropdown:hover .dropdown-content {
@@ -132,8 +89,64 @@ body {
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  flex-direction: row;
 }
 
 .smash-button:hover {
   background-color: #5b3e59;
+}
+
+.game-container {
+  text-align: center;
+  margin-top: 5%;
+}
+.canvas-container{
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+canvas {
+  background: #70c5ce;
+  border: 3px solid #222;
+  border-radius: 10px;
+  width: 90vw;
+  max-width: 480px;
+  height: 70vh;
+}
+
+.info {
+  margin-top: 10px;
+  font-size: 1.2em;
+  color: #333;
+}
+@media (max-width: 400px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    position: fixed;
+
+  }
+
+  .nav-links {
+    flex-direction: row;
+    width: 100%;
+  }
+
+  .smash-button {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    margin-top: 10px;
+    position: relative;
+  }
+
+  .canvas-container {
+    padding: 10px;
+    align-items: center;
+  }
+  @media (min-width: 400px) {
+  .smash-button {
+        flex-direction: row;
+    }
 }

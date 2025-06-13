@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FlappyBird NavBar</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo">
+      <img src="icon.jpeg" alt="FlappyBird" /> 
+      <span>FlappyBird</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#">HOME</a></li>
+      <li class="dropdown">
+        <a href="#">GAME MODES </a>
+    <select name="Game Mode" id="mode" onchange="redirectToGameMode()">
+        <option value="Easy_mode.html">Easy Mode</option>
+        <option value="Frenzy_mode.html">Frenzy Mode (Easiest)</option>
+        <option value="Flappy_mario.html">Flappy Mario</option>
+        <option value="flappy2048.html">Flappy 2048</option>
+    </select>
+     </li>
+      <li><a href="#">DOWNLOAD NOW</a></li>
+      <li><a href="#">BLOG</a></li>
+      <li><a href="#">ABOUT</a></li>
+    <button class="smash-button">Smash Flappy</button>
+  </nav>
+  <div class="game-container">
+    <canvas id="flappyCanvas"></canvas>
+    <div class="info">Click or Tap to Fly 🐥</div>
+  </div>
+  <script src="script.js"></script>
+</body>
+a</html>

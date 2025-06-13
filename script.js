@@ -99,8 +99,7 @@ function flap() {
     bird.velocity = 0;
     pipes = [];
     score = 0;
-    gameOver = false;
-    update();
+    gameOver = false;update();
   }
 }
 
@@ -109,3 +108,10 @@ document.addEventListener("click", flap);
 document.addEventListener("touchstart", flap);
 
 update();
+function redirectToGameMode() {
+        const select = document.getElementById('mode');
+        const selectedValue = select.value;
+        if (selectedValue) {
+            window.location.href = selectedValue;
+        }
+    }
