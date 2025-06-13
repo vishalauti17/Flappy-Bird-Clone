@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Floppy Bird</title>
+    <title>Floppy Mario</title>
     <style>
         body {
             margin: 0;
@@ -24,39 +24,30 @@
             overflow: hidden;
         }
         
-        #bird {
+        #mario {
             position: absolute;
-            width: 50px;
+            width: 40px;
             height: 40px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><rect width="40" height="40" fill="%23e52521"/><rect x="8" y="8" width="8" height="8" fill="%23fbd849"/><rect x="24" y="8" width="8" height="8" fill="%23fbd849"/><rect x="8" y="16" width="24" height="8" fill="%23fbd849"/><rect x="8" y="24" width="8" height="8" fill="%23a62b20"/><rect x="24" y="24" width="8" height="8" fill="%23a62b20"/><rect x="16" y="24" width="8" height="8" fill="%23fbd849"/><rect x="8" y="32" width="8" height="8" fill="%23fbd849"/><rect x="24" y="32" width="8" height="8" fill="%23fbd849"/></svg>');
+            background-size: contain;
             z-index: 10;
             transition: transform 0.1s;
         }
         
-        .poll {
+        .pipe {
             position: absolute;
-            width: 30px;
-            background-color: #8B4513;
-            border-right: 5px solid #A0522D;
-            z-index: 5;
-        }
-        
-        .poll-top {
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 10"><rect width="30" height="10" fill="%238B4513"/><rect x="0" y="0" width="5" height="10" fill="%23A0522D"/></svg>');
+            width: 60px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 10"><rect width="60" height="10" fill="%2337a42a"/><rect x="5" y="0" width="50" height="5" fill="%23218714"/><rect x="10" y="0" width="40" height="3" fill="%2342d426"/></svg>');
             background-repeat: repeat-y;
         }
         
-        .poll-bottom {
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 10"><rect width="30" height="10" fill="%238B4513"/><rect x="0" y="0" width="5" height="10" fill="%23A0522D"/></svg>');
-            background-repeat: repeat-y;
+        .pipe-top {
+            background-position: bottom;
+            transform: rotate(180deg);
         }
         
-        .crossbar {
-            position: absolute;
-            height: 10px;
-            background-color: #A0522D;
-            border-top: 3px solid #8B4513;
-            border-bottom: 3px solid #8B4513;
-            z-index: 4;
+        .pipe-bottom {
+            background-position: top;
         }
         
         #ground {
@@ -122,35 +113,12 @@
             from { background-position: 0 0; }
             to { background-position: 1000px 0; }
         }
-        
-        /* Bird animation */
-        @keyframes bird-flap {
-            0% { transform: rotate(-10deg); }
-            50% { transform: rotate(10deg); }
-            100% { transform: rotate(-10deg); }
-        }
     </style>
 </head>
 <body>
     <div id="game-container">
         <div id="clouds"></div>
-        <div id="bird">
-            <svg viewBox="0 0 50 40" xmlns="http://www.w3.org/2000/svg">
-                <!-- Body -->
-                <ellipse cx="25" cy="20" rx="20" ry="15" fill="#FFD700"/>
-                <!-- Eye -->
-                <circle cx="35" cy="15" r="3" fill="white"/>
-                <circle cx="35" cy="15" r="1.5" fill="black"/>
-                <!-- Beak -->
-                <path d="M40 18 L50 20 L40 22 Z" fill="#FF8C00"/>
-                <!-- Wing -->
-                <path d="M15 20 Q25 10 25 20 Q25 30 15 20" fill="#FFA500"/>
-                <!-- Tail feathers -->
-                <path d="M5 20 L0 15 L0 25 Z" fill="#FFA500"/>
-                <!-- Cheek blush -->
-                <circle cx="38" cy="20" r="3" fill="#FF69B4" opacity="0.5"/>
-            </svg>
-        </div>
+        <div id="mario"></div>
         <div id="ground"></div>
         <div id="score">0</div>
         <div id="game-over">
@@ -163,7 +131,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const gameContainer = document.getElementById('game-container');
-            const bird = document.getElementById('bird');
+            const mario = document.getElementById('mario');
             const scoreElement = document.getElementById('score');
             const gameOverScreen = document.getElementById('game-over');
             const finalScoreElement = document.getElementById('final-score');
@@ -175,62 +143,37 @@
             let gravity = 0.5;
             let velocity = 0;
             let position = 250;
-            let pollSpeed = 2;
-            let polls = [];
-            let pollGap = 180;
-            let pollFrequency = 1800; // milliseconds
-            let lastPollTime = 0;
+            let pipeSpeed = 2;
+            let pipes = [];
+            let pipeGap = 150;
+            let pipeFrequency = 1500; // milliseconds
+            let lastPipeTime = 0;
             let jumpSound, scoreSound, hitSound;
-            let flapAnimation;
             
-            // Initialize bird position
-            bird.style.left = '100px';
-            bird.style.top = position + 'px';
+            // Initialize Mario position
+            mario.style.left = '100px';
+            mario.style.top = position + 'px';
             
-           // Add this to your createAudio() function
-function createBeepAudio(ctx, frequency, duration) {
-    const oscillator = ctx.createOscillator();
-    const gainNode = ctx.createGain();
-    
-    oscillator.type = 'sine';
-    oscillator.frequency.value = frequency;
-    oscillator.connect(gainNode);
-    
-    gainNode.connect(ctx.destination);
-    gainNode.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + duration);
-    
-    return oscillator;
-}
-
-// Then modify createAudio() to use this:
-function createAudio() {
-    try {
-        const audioContext = new (window.audiotext.mp3 || window.webkitAudioContext)(audiotext.mp4);
-        
-        // Jump sound (high pitch short beep)
-        jumpSound = createBeepAudio(audiotext.mp3, 800, 0.1);
-        
-        // Score sound (two quick high beeps)
-        scoreSound = createBeepAudio(audioContext, 1000, 0.05);
-        
-        // Hit sound (low pitch longer beep)
-        hitSound = createBeepAudio(audioContext, 300, 0.5);
-        
-    } catch (e) {
-        console.error("Audio initialization failed:", e);
-    }
-}
+            // Create audio elements
+            function createAudio() {
+                jumpSound = new Audio();
+                jumpSound.src = 'data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU...'; // Short jump sound
+                
+                scoreSound = new Audio();
+                scoreSound.src = 'data:audio/wav;base64,UklGRm9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU...'; // Coin sound
+                
+                hitSound = new Audio();
+                hitSound.src = 'data:audio/wav;base64,UklGRnNvT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU...'; // Bump sound
+            }
+            
             // Jump function
             function jump() {
                 if (!gameRunning) return;
                 velocity = -10;
-                
-                // Add wing flap animation
-                bird.style.animation = 'bird-flap 0.3s ease-in-out';
+                mario.style.transform = 'rotate(-20deg)';
                 setTimeout(() => {
-                    bird.style.animation = '';
-                }, 300);
-                
+                    mario.style.transform = 'rotate(0deg)';
+                }, 200);
                 if (jumpSound) jumpSound.play().catch(e => {});
             }
             
@@ -247,75 +190,55 @@ function createAudio() {
             
             restartBtn.addEventListener('click', restartGame);
             
-            // Create a new poll
-            function createPoll() {
-                const pollHeight = Math.floor(Math.random() * 200) + 100;
-                const pollTop = document.createElement('div');
-                const pollBottom = document.createElement('div');
-                const crossbarTop = document.createElement('div');
-                const crossbarBottom = document.createElement('div');
+            // Create a new pipe
+            function createPipe() {
+                const pipeHeight = Math.floor(Math.random() * 200) + 100;
+                const pipeTop = document.createElement('div');
+                const pipeBottom = document.createElement('div');
                 
-                pollTop.className = 'poll poll-top';
-                pollBottom.className = 'poll poll-bottom';
-                crossbarTop.className = 'crossbar';
-                crossbarBottom.className = 'crossbar';
+                pipeTop.className = 'pipe pipe-top';
+                pipeBottom.className = 'pipe pipe-bottom';
                 
-                pollTop.style.height = pollHeight + 'px';
-                pollTop.style.left = gameContainer.offsetWidth + 'px';
-                pollTop.style.top = '0';
+                pipeTop.style.height = pipeHeight + 'px';
+                pipeTop.style.left = gameContainer.offsetWidth + 'px';
+                pipeTop.style.top = '0';
                 
-                pollBottom.style.height = (gameContainer.offsetHeight - pollHeight - pollGap - 30) + 'px';
-                pollBottom.style.left = gameContainer.offsetWidth + 'px';
-                pollBottom.style.top = (pollHeight + pollGap) + 'px';
+                pipeBottom.style.height = (gameContainer.offsetHeight - pipeHeight - pipeGap - 30) + 'px';
+                pipeBottom.style.left = gameContainer.offsetWidth + 'px';
+                pipeBottom.style.top = (pipeHeight + pipeGap) + 'px';
                 
-                crossbarTop.style.width = '60px';
-                crossbarTop.style.left = (gameContainer.offsetWidth - 30) + 'px';
-                crossbarTop.style.top = (pollHeight - 5) + 'px';
+                gameContainer.appendChild(pipeTop);
+                gameContainer.appendChild(pipeBottom);
                 
-                crossbarBottom.style.width = '60px';
-                crossbarBottom.style.left = (gameContainer.offsetWidth - 30) + 'px';
-                crossbarBottom.style.top = (pollHeight + pollGap) + 'px';
-                
-                gameContainer.appendChild(pollTop);
-                gameContainer.appendChild(pollBottom);
-                gameContainer.appendChild(crossbarTop);
-                gameContainer.appendChild(crossbarBottom);
-                
-                polls.push({
-                    top: pollTop,
-                    bottom: pollBottom,
-                    crossbarTop: crossbarTop,
-                    crossbarBottom: crossbarBottom,
+                pipes.push({
+                    top: pipeTop,
+                    bottom: pipeBottom,
                     x: gameContainer.offsetWidth,
                     passed: false
                 });
             }
             
-            // Move polls
-            function movePolls() {
-                for (let i = 0; i < polls.length; i++) {
-                    const poll = polls[i];
-                    poll.x -= pollSpeed;
-                    poll.top.style.left = poll.x + 'px';
-                    poll.bottom.style.left = poll.x + 'px';
-                    poll.crossbarTop.style.left = (poll.x - 30) + 'px';
-                    poll.crossbarBottom.style.left = (poll.x - 30) + 'px';
+            // Move pipes
+            function movePipes() {
+                for (let i = 0; i < pipes.length; i++) {
+                    const pipe = pipes[i];
+                    pipe.x -= pipeSpeed;
+                    pipe.top.style.left = pipe.x + 'px';
+                    pipe.bottom.style.left = pipe.x + 'px';
                     
-                    // Check if poll is passed
-                    if (!poll.passed && poll.x < 100 - 30) {
-                        poll.passed = true;
+                    // Check if pipe is passed
+                    if (!pipe.passed && pipe.x < 100 - 60) {
+                        pipe.passed = true;
                         score++;
                         scoreElement.textContent = score;
                         if (scoreSound) scoreSound.play().catch(e => {});
                     }
                     
-                    // Remove polls that are off screen
-                    if (poll.x < -60) {
-                        gameContainer.removeChild(poll.top);
-                        gameContainer.removeChild(poll.bottom);
-                        gameContainer.removeChild(poll.crossbarTop);
-                        gameContainer.removeChild(poll.crossbarBottom);
-                        polls.splice(i, 1);
+                    // Remove pipes that are off screen
+                    if (pipe.x < -60) {
+                        gameContainer.removeChild(pipe.top);
+                        gameContainer.removeChild(pipe.bottom);
+                        pipes.splice(i, 1);
                         i--;
                     }
                 }
@@ -335,78 +258,42 @@ function createAudio() {
                     velocity = 0;
                 }
                 
-                // Check poll collisions
-                const birdRect = {
+                // Check pipe collisions
+                const marioRect = {
                     x: 100,
                     y: position,
-                    width: 50,
+                    width: 40,
                     height: 40
                 };
                 
-                for (const poll of polls) {
-                    // Check vertical polls
-                    const topPollRect = {
-                        x: poll.x,
+                for (const pipe of pipes) {
+                    const topPipeRect = {
+                        x: pipe.x,
                         y: 0,
-                        width: 30,
-                        height: parseInt(poll.top.style.height)
-                    };
-                    
-                    const bottomPollRect = {
-                        x: poll.x,
-                        y: parseInt(poll.bottom.style.top),
-                        width: 30,
-                        height: parseInt(poll.bottom.style.height)
-                    };
-                    
-                    // Check crossbars
-                    const topCrossbarRect = {
-                        x: poll.x - 30,
-                        y: parseInt(poll.crossbarTop.style.top),
                         width: 60,
-                        height: 10
+                        height: parseInt(pipe.top.style.height)
                     };
                     
-                    const bottomCrossbarRect = {
-                        x: poll.x - 30,
-                        y: parseInt(poll.crossbarBottom.style.top),
+                    const bottomPipeRect = {
+                        x: pipe.x,
+                        y: parseInt(pipe.bottom.style.top),
                         width: 60,
-                        height: 10
+                        height: parseInt(pipe.bottom.style.height)
                     };
                     
                     if (
-                        birdRect.x < topPollRect.x + topPollRect.width &&
-                        birdRect.x + birdRect.width > topPollRect.x &&
-                        birdRect.y < topPollRect.y + topPollRect.height
+                        marioRect.x < topPipeRect.x + topPipeRect.width &&
+                        marioRect.x + marioRect.width > topPipeRect.x &&
+                        marioRect.y < topPipeRect.y + topPipeRect.height
                     ) {
                         gameOver();
                         return;
                     }
                     
                     if (
-                        birdRect.x < bottomPollRect.x + bottomPollRect.width &&
-                        birdRect.x + birdRect.width > bottomPollRect.x &&
-                        birdRect.y + birdRect.height > bottomPollRect.y
-                    ) {
-                        gameOver();
-                        return;
-                    }
-                    
-                    if (
-                        birdRect.x < topCrossbarRect.x + topCrossbarRect.width &&
-                        birdRect.x + birdRect.width > topCrossbarRect.x &&
-                        birdRect.y < topCrossbarRect.y + topCrossbarRect.height &&
-                        birdRect.y + birdRect.height > topCrossbarRect.y
-                    ) {
-                        gameOver();
-                        return;
-                    }
-                    
-                    if (
-                        birdRect.x < bottomCrossbarRect.x + bottomCrossbarRect.width &&
-                        birdRect.x + birdRect.width > bottomCrossbarRect.x &&
-                        birdRect.y < bottomCrossbarRect.y + bottomCrossbarRect.height &&
-                        birdRect.y + birdRect.height > bottomCrossbarRect.y
+                        marioRect.x < bottomPipeRect.x + bottomPipeRect.width &&
+                        marioRect.x + marioRect.width > bottomPipeRect.x &&
+                        marioRect.y + marioRect.height > bottomPipeRect.y
                     ) {
                         gameOver();
                         return;
@@ -421,27 +308,17 @@ function createAudio() {
                 finalScoreElement.textContent = score;
                 gameOverScreen.style.display = 'block';
                 if (hitSound) hitSound.play().catch(e => {});
-                bird.style.transform = 'rotate(90deg)';
-                
-                // Announce game over with voice
-                if ('speechSynthesis' in window) {
-                    const gameOverVoice = new SpeechSynthesisUtterance();
-                    gameOverVoice.text = Game over! Your score was ${score};
-                    gameOverVoice.rate = 1.0;
-                    window.speechSynthesis.speak(gameOverVoice);
-                }
+                mario.style.transform = 'rotate(90deg)';
             }
             
             // Restart game function
             function restartGame() {
-                // Clear polls
-                for (const poll of polls) {
-                    gameContainer.removeChild(poll.top);
-                    gameContainer.removeChild(poll.bottom);
-                    gameContainer.removeChild(poll.crossbarTop);
-                    gameContainer.removeChild(poll.crossbarBottom);
+                // Clear pipes
+                for (const pipe of pipes) {
+                    gameContainer.removeChild(pipe.top);
+                    gameContainer.removeChild(pipe.bottom);
                 }
-                polls = [];
+                pipes = [];
                 
                 // Reset game state
                 gameRunning = true;
@@ -451,13 +328,12 @@ function createAudio() {
                 scoreElement.textContent = '0';
                 gameOverScreen.style.display = 'none';
                 
-                // Reset bird position and rotation
-                bird.style.top = position + 'px';
-                bird.style.transform = 'rotate(0deg)';
-                bird.style.animation = '';
+                // Reset Mario position and rotation
+                mario.style.top = position + 'px';
+                mario.style.transform = 'rotate(0deg)';
                 
                 // Start game loop
-                lastPollTime = 0;
+                lastPipeTime = 0;
                 requestAnimationFrame(gameLoop);
             }
             
@@ -468,18 +344,18 @@ function createAudio() {
                 // Apply gravity
                 velocity += gravity;
                 position += velocity;
-                bird.style.top = position + 'px';
+                mario.style.top = position + 'px';
                 
-                // Create new polls
-                if (timestamp - lastPollTime > pollFrequency) {
-                    createPoll();
-                    lastPollTime = timestamp;
+                // Create new pipes
+                if (timestamp - lastPipeTime > pipeFrequency) {
+                    createPipe();
+                    lastPipeTime = timestamp;
                     // Increase difficulty as score increases
-                    pollFrequency = Math.max(1000, 1800 - score * 20);
-                    pollSpeed = Math.min(5, 2 + score * 0.05);
+                    pipeFrequency = Math.max(1000, 1500 - score * 20);
+                    pipeSpeed = Math.min(5, 2 + score * 0.05);
                 }
                 
-                movePolls();
+                movePipes();
                 checkCollision();
                 
                 requestAnimationFrame(gameLoop);
