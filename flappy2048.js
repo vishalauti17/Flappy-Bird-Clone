@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const column1 = document.querySelector('.column');
     const column2 = document.querySelector('.column2');
     
-    // Ensure clones have correct classes
+    
     const column1Clone = column1.cloneNode(true);
     const column2Clone = column2.cloneNode(true);
     column1Clone.classList.remove('column2');
@@ -75,10 +75,10 @@ document.addEventListener('DOMContentLoaded', function() {
     function initializeNumbers() {
         console.log('Initializing numbers...');
         sequenceIndex = 0;
-        assignNumbers(column1); // Assigns 1
-        assignNumbers(column2); // Assigns 2
-        assignNumbers(column1Clone); // Assigns 4
-        assignNumbers(column2Clone); // Assigns 8
+        assignNumbers(column1); 
+        assignNumbers(column2); 
+        assignNumbers(column1Clone); 
+        assignNumbers(column2Clone); 
     }
 
     initializeNumbers();
