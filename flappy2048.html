@@ -5,14 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Edu+NSW+ACT+Hand+Pre:wght@400..700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Edu+NSW+ACT+Hand+Pre:wght@400..700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Oswald:wght@200..700&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Edu+NSW+ACT+Hand+Pre:wght@400..700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Oswald:wght@200..700&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <title>Flappy 2048</title>
     <link rel="stylesheet" href="flappy2048.css">
 </head>
@@ -23,15 +16,15 @@
         <div class="buttons">
             <ul>
                 <li><a href="#" class="home">Home</a></li>
-                  <li>Game Mode
-    <select name="Game Mode" id="mode" onchange="redirectToGameMode()">
-        <option value="">Select a game mode...</option>
-        <option value="Easy_mode.html">Easy Mode</option>
-        <option value="Frenzy_mode.html">Frenzy Mode (Easiest)</option>
-        <option value="Flappy_mario.html">Flappy Mario</option>
-        <option value="flappy2048.html">Flappy 2048</option>
-    </select>
-</li>
+                <li>Game Mode
+                    <select name="Game Mode" id="mode" onchange="redirectToGameMode()">
+                        <option value="">Select a game mode...</option>
+                        <option value="Easy_mode.html">Easy Mode</option>
+                        <option value="Frenzy_mode.html">Frenzy Mode (Easiest)</option>
+                        <option value="Flappy_mario.html">Flappy Mario</option>
+                        <option value="flappy2048.html">Flappy 2048</option>
+                    </select>
+                </li>
                 <li><a href="#" class="Download-now">Download Now</a></li>
                 <li><a href="#" class="blog">Blog</a></li>
                 <li><a href="#" class="about">About</a></li>
@@ -41,7 +34,6 @@
     </nav>
  </header>
  <main>
-   
     <section>
         <div class="game-board">
             <div class="squre">
@@ -69,46 +61,42 @@
             <div class="bottom-img">
                 <img class="ground" src="ground.png" alt="ground image">
             </div>
-            <button id="stopBtn">Push Game</button>
+            <button id="pauseBtn">Pause</button>
+            <button id="tapBtn"></button>
+            <div class="score">Score: <span id="scoreValue">0</span></div>
             <div class="flappy2048"><p>Flappy 2048</p></div>
             <div class="start">
                 <button id="startBtn">Click to start</button>
             </div>
+            <div class="game-over">
+                <p>Game Over!</p>
+                <p>Score: <span id="finalScore">0</span></p>
+                <button id="restartBtn">Restart</button>
+            </div>
         </div>
     </section>
-    
     <section class="section2">
         <div class="outerAB">
             <div class="left">
                <div class="left-top">
-                  <p>
-                     Soar to new heights of endless entertainment 
-                  </p>
-                  <p>with Flappy
-                     2048, the captivating fusion of flapping fun
-                  </p>
-                  <p>
-                     and strategic challenges!
-                  </p>
+                  <p>Soar to new heights of endless entertainment</p>
+                  <p>with Flappy 2048, the captivating fusion of flapping fun</p>
+                  <p>and strategic challenges!</p>
                </div>
                <div class="left-bottom">
-                  <p>
-                    Play the original Flappy Bird once you feel like you’ve gotten good enough!
-                  </p>
+                  <p>Play the original Flappy Bird once you feel like you’ve gotten good enough!</p>
                </div>
             </div>
             <div class="right">
                <h1>About Flappy 2048</h1>
-
                <div class="right-middle">
-                <p>Immerse yourself in the addictive world of Flappy 2048, where </p>
+                <p>Immerse yourself in the addictive world of Flappy 2048, where</p>
                 <p>endless excitement awaits! Flap your way through the correct</p>
-                <p>numbers in this thrilling and addictive experience, merging the joy </p>
-                <p>of flapping with strategic number challenges. Embark on an </p>
-                <p> endless journey of fun and skill in Flappy 2048!</p>
+                <p>numbers in this thrilling and addictive experience, merging the joy</p>
+                <p>of flapping with strategic number challenges. Embark on an</p>
+                <p>endless journey of fun and skill in Flappy 2048!</p>
                </div>
-
-               <div right-button>
+               <div class="right-button">
                   <form action="#">
                     <button><p>Play Smash Flappy</p></button>
                   </form>
@@ -117,6 +105,6 @@
         </div>
     </section>
  </main>
-    <script src="flappy2048.js"></script>
+ <script src="flappy2048.js"></script>
 </body>
 </html>
